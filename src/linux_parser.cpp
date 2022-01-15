@@ -22,7 +22,7 @@ string LinuxParser::OperatingSystem() {
       std::replace(line.begin(), line.end(), '=', ' ');
       std::replace(line.begin(), line.end(), '"', ' ');
       std::istringstream linestream(line);
-      while (linestream >> key >> value) {
+      while (linestream >> key >> value) { // why should this be in a while and not just linestream >> key >> value;?
         if (key == "PRETTY_NAME") {
           std::replace(value.begin(), value.end(), '_', ' ');
           return value;
@@ -160,7 +160,7 @@ int LinuxParser::TotalProcesses() {
 
 // TODO: Read and return the number of running processes
 int LinuxParser::RunningProcesses() {
-    string line;
+  string line;
   string key;
   int value;
   std::ifstream filestream(kProcDirectory + kStatFilename);
@@ -187,12 +187,49 @@ string LinuxParser::Command(int pid[[maybe_unused]]) { return string(); }
 string LinuxParser::Ram(int pid[[maybe_unused]]) { return string(); }
 
 // TODO: Read and return the user ID associated with a process
-// REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::Uid(int pid[[maybe_unused]]) { return string(); }
+int LinuxParser::Uid(int pid) {
+  string line;
+  string key;
+  int uid;
+  std::ifstream filestream(kProcDirectory + "/" + std::to_string(pid) + "/" + kStatusFilename);
+  if (filestream.is_open()) {
+    while (std::getline(filestream, line)) {
+      std::istringstream linestream(line);
+      linestream >> key;
+      if (key == "Uid:") {
+        linestream >> uid;
+        return uid;
+      }
+    }
+  }
+  // if key was not found, return -1
+  return -1;
+}
 
 // TODO: Read and return the user associated with a process
-// REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::User(int pid[[maybe_unused]]) { return string(); }
+string LinuxParser::User(int pid) {
+  int uid = LinuxParser::Uid(pid);
+  if(uid==-1){return "uid not found";}
+
+  // find user in file
+  string line, user, placeHolder;
+  int id;
+
+  std::ifstream filestream(kPasswordPath);
+  if (filestream.is_open()) {
+    while (std::getline(filestream, line)) {
+      std::replace(line.begin(), line.end(), ':', ' ');
+      std::istringstream linestream(line);
+      linestream >> user >> placeHolder >> id;
+      if (id == uid) {
+        std::replace(user.begin(), user.end(), '_', ' ');
+        return user;
+      }
+    }
+  }
+
+  return "not found";
+}
 
 // TODO: Read and return the uptime of a process
 // REMOVE: [[maybe_unused]] once you define the function
