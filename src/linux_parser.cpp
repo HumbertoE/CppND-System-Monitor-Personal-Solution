@@ -66,7 +66,7 @@ vector<int> LinuxParser::Pids() {
   return pids;
 }
 
-// TODO: Read and return the system memory utilization
+// DONE: Read and return the system memory utilization
 float LinuxParser::MemoryUtilization() {
   string placeHolder;
   string line;
@@ -86,7 +86,7 @@ float LinuxParser::MemoryUtilization() {
   return (memTotal-memFree)/memTotal;
 }
 
-// TODO: Read and return the system uptime
+// DONE: Read and return the system uptime
 long int LinuxParser::UpTime() {
   string line;
   long int upTime;
@@ -114,7 +114,7 @@ long LinuxParser::ActiveJiffies() { return 0; }
 // TODO: Read and return the number of idle jiffies for the system
 long LinuxParser::IdleJiffies() { return 0; }
 
-// TODO: Read and return the number of active jiffies for the system
+// DONE: Read and return the number of active jiffies for the system
 vector<long> LinuxParser::ActiveIdleJiffies() {
   string line;
   string placeHolder;
@@ -138,7 +138,7 @@ vector<long> LinuxParser::ActiveIdleJiffies() {
 // TODO: Read and return CPU utilization
 vector<string> LinuxParser::CpuUtilization() { return {}; }
 
-// TODO: Read and return the total number of processes
+// DONE: Read and return the total number of processes
 int LinuxParser::TotalProcesses() { 
   string line;
   string key;
@@ -158,7 +158,7 @@ int LinuxParser::TotalProcesses() {
   return 0;
 }
 
-// TODO: Read and return the number of running processes
+// DONE: Read and return the number of running processes
 int LinuxParser::RunningProcesses() {
   string line;
   string key;
@@ -186,7 +186,7 @@ string LinuxParser::Command(int pid[[maybe_unused]]) { return string(); }
 // REMOVE: [[maybe_unused]] once you define the function
 string LinuxParser::Ram(int pid[[maybe_unused]]) { return string(); }
 
-// TODO: Read and return the user ID associated with a process
+// DONE: Read and return the user ID associated with a process
 int LinuxParser::Uid(int pid) {
   string line;
   string key;
@@ -206,7 +206,7 @@ int LinuxParser::Uid(int pid) {
   return -1;
 }
 
-// TODO: Read and return the user associated with a process
+// DONE: Read and return the user associated with a process
 string LinuxParser::User(int pid) {
   int uid = LinuxParser::Uid(pid);
   if(uid==-1){return "uid not found";}
